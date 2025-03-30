@@ -1,17 +1,20 @@
+import { readFile } from "fs/promises";
 import { JSONFilePreset } from "lowdb/node";
-import database from "../db.json" assert { type: "json" };
-
+import { join } from "path";
 class ProductService {
-  constructor() {
-    this.defaultData = database;
-  }
-
   async init() {
-    this.db = await JSONFilePreset("../db.json", this.defaultData);
-    await this.db.read();
+    const filePath = join(process.cwd(), "src", "db.json");
+
+    // Read db.json manually
+    const jsonData = await readFile(filePath, "utf-8");
+    this.defaultData = JSON.parse(jsonData);
+
+    this.db = await JSONFilePreset(filePath, this.defaultData);
+    await this.db.read(); // Ensure data is loaded
+
+    // Write only if db.json is empty
     if (!this.db.data || Object.keys(this.db.data).length === 0) {
       this.db.data = this.defaultData;
-      console.log("Initializing database with default data...");
       await this.db.write();
     }
   }
