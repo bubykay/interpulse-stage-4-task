@@ -24,7 +24,6 @@ class ProductService {
     const startIndex = (page - 1) * limit;
     const endIndex = page * limit;
     const products = this.db.data.products.slice(startIndex, endIndex);
-    console.log("Products:", startIndex, endIndex, products);
     return {
       currentPage: page,
       totalPages: Math.ceil(this.db.data.products.length / limit),
