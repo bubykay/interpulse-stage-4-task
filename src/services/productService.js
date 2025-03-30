@@ -19,9 +19,18 @@ class ProductService {
     }
   }
 
-  async getAllProducts() {
+  async getAllProducts({ page = 1, limit = 10 }) {
     await this.db.read();
-    return this.db.data.products;
+    const startIndex = (page - 1) * limit;
+    const endIndex = page * limit;
+    const products = this.db.data.products.slice(startIndex, endIndex);
+    console.log("Products:", startIndex, endIndex, products);
+    return {
+      currentPage: page,
+      totalPages: Math.ceil(this.db.data.products.length / limit),
+      totalProducts: this.db.data.products.length,
+      products,
+    };
   }
 
   async getProductById(id) {
@@ -74,6 +83,9 @@ class ProductService {
 
   async getProductsByStockStatus(stock_status) {
     return this.db.data.products.filter((p) => p.stock_status === stock_status);
+  }
+  async getProductBySku(sku) {
+    return this.db.data.products.find((p) => p.sku === sku);
   }
 }
 

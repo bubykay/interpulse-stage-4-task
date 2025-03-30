@@ -27,7 +27,7 @@ class App {
   routes() {
     this.app.use("/health", healthRoutes);
     this.app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-    this.app.use("/products", productRoutes);
+    this.app.use("/api/v1/products", productRoutes);
   }
 
   errorHandler() {

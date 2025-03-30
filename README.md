@@ -1,86 +1,236 @@
-# HNG12 Stage 0 - Public API
+# **Product API Documentation**
 
-## Overview
-This project is a simple public API that provides basic information, including:
-- Your registered email address (used on HNG12 Slack workspace).
-- The current date and time in ISO 8601 format.
-- The GitHub repository URL for this project.
+## **Overview**
 
-The API is built using **Node.js** with **Express.js** and follows best practices for structuring and handling requests.
+The **Product API** is a RESTful service that allows users to manage products. It provides CRUD operations and supports filtering, searching, and pagination.
 
-## Features
-- RESTful API with a single endpoint.
-- Returns JSON-formatted responses.
-- CORS-enabled for cross-origin requests.
-- Proper error handling.
-- Hosted on a publicly accessible platform.
+## **Installation & Setup**
 
-## Technology Stack
-- **Programming Language:** JavaScript (Node.js)
-- **Framework:** Express.js
-- **Deployment Platform:** [Specify your hosting provider]
-- **Version Control:** Git & GitHub
+### **Prerequisites**
 
-## API Documentation
-### Endpoint: `GET /api`
-#### Response Format (200 OK)
+- Node.js (v16+ recommended)
+- Yarn or npm
+
+### **Steps to Set Up the Project**
+
+```sh
+# Clone the repository
+git clone <repository-url>
+cd <project-folder>
+
+# Install dependencies
+yarn install  # or npm install
+
+# Start the server
+yarn dev  # or npm run dev
+```
+
+## **Base URL**
+
+```
+http://localhost:3000/api/v1
+```
+
+---
+
+## **Endpoints**
+
+### **1. Get All Products**
+
+**GET /products**
+
+#### **Query Parameters (Optional)**
+
+| Parameter | Type | Description                               |
+| --------- | ---- | ----------------------------------------- |
+| `page`    | int  | Page number (default: 1)                  |
+| `limit`   | int  | Number of products per page (default: 10) |
+
+#### **Example Request**
+
+```
+GET /api/v1/products?page=1&limit=5
+```
+
+#### **Example Response**
+
 ```json
 {
-  "email": "your-email@example.com",
-  "current_datetime": "2025-01-30T09:30:00Z",
-  "github_url": "https://github.com/yourusername/your-repo"
+  "status": "success",
+  "totalProducts": 50,
+  "page": 1,
+  "limit": 5,
+  "totalPages": 10,
+  "data": [
+    { "id": "P001", "name": "Wireless Mouse", "price": 29.99 },
+    { "id": "P002", "name": "Mechanical Keyboard", "price": 59.99 }
+  ]
 }
 ```
-- **SwaggerDoc Link:** [https://hng-week1-riea.onrender.com/api-docs/#/default/get_api_info](https://hng-week1-riea.onrender.com/api-docs/#/default/get_api_info)
 
-## Getting Started
-### Prerequisites
-Ensure you have the following installed:
-- [Node.js](https://nodejs.org/) (v16+ recommended)
-- [Yarn](https://yarnpkg.com/) (optional but recommended)
-- Git
+---
 
-### Installation
-1. Clone the repository:
-   ```sh
-   git clone https://github.com/yourusername/your-repo.git
-   cd your-repo
-   ```
+### **2. Get Product by ID**
 
-2. Install dependencies:
-   ```sh
-   yarn install  # or npm install
-   ```
+**GET /products/:id**
 
-3. Start the server locally:
-   ```sh
-   yarn dev  # or npm run dev
-   ```
-   The server will run on `http://localhost:3000` by default.
+#### **Example Request**
 
-## Deployment
-To deploy the API, you can use any cloud platform such as:
-- Vercel
-- Render
-- Railway
-- AWS Lambda (via API Gateway)
-- DigitalOcean, Linode, or Heroku
+```
+GET /api/v1/products/P001
+```
 
-Ensure the API is accessible via a public URL before submission.
+#### **Example Response**
 
-## Links
-- **GitHub Repository:** [https://github.com/bubykay/hng-week1/](https://github.com/bubykay/hng-week1)
-- **HNG Internship Hiring Links:**
-  - [Python Developers](https://hng.tech/hire/python-developers)
-  - [C# Developers](https://hng.tech/hire/csharp-developers)
-  - [Golang Developers](https://hng.tech/hire/golang-developers)
-  - [PHP Developers](https://hng.tech/hire/php-developers)
-  - [Java Developers](https://hng.tech/hire/java-developers)
-  - [Node.js Developers](https://hng.tech/hire/nodejs-developers)
+```json
+{
+  "id": "P001",
+  "name": "Wireless Mouse",
+  "category": "Electronics",
+  "price": 29.99,
+  "stock_status": "in_stock",
+  "sku": "WM-001",
+  "description": "A high-precision wireless mouse with ergonomic design."
+}
+```
 
-## License
-This project is licensed under the MIT License.
+---
 
-## Contact
-For any issues, feel free to open an issue on GitHub or reach out via email: `your-email@example.com`.
+### **3. Create a New Product**
 
+**POST /products**
+
+#### **Request Body (JSON)**
+
+```json
+{
+  "name": "Wireless Mouse",
+  "category": "Electronics",
+  "price": 29.99,
+  "stock_status": "in_stock",
+  "sku": "WM-001",
+  "description": "A high-precision wireless mouse with ergonomic design."
+}
+```
+
+#### **Response**
+
+```json
+{
+  "status": "success",
+  "message": "Product created successfully",
+  "data": {
+    "id": "P1709136356352",
+    "name": "Wireless Mouse",
+    "category": "Electronics",
+    "price": 29.99,
+    "stock_status": "in_stock",
+    "sku": "WM-001",
+    "description": "A high-precision wireless mouse with ergonomic design."
+  }
+}
+```
+
+---
+
+### **4. Update a Product**
+
+**PUT /products/:id**
+
+#### **Request Body (JSON)**
+
+```json
+{
+  "price": 24.99,
+  "stock_status": "out_of_stock"
+}
+```
+
+#### **Response**
+
+```json
+{
+  "status": "success",
+  "message": "Product updated successfully",
+  "data": {
+    "id": "P001",
+    "name": "Wireless Mouse",
+    "category": "Electronics",
+    "price": 24.99,
+    "stock_status": "out_of_stock",
+    "sku": "WM-001",
+    "description": "A high-precision wireless mouse with ergonomic design."
+  }
+}
+```
+
+---
+
+### **5. Delete a Product**
+
+**DELETE /products/:id**
+
+#### **Example Request**
+
+```
+DELETE /api/v1/products/P001
+```
+
+#### **Response**
+
+```json
+{
+  "status": "success",
+  "message": "Product deleted successfully"
+}
+```
+
+---
+
+## **Filtering & Searching**
+
+- **By Category:** `GET /products?category=Electronics`
+- **By Price Range:** `GET /products?minPrice=10&maxPrice=50`
+- **By Name (Partial Search):** `GET /products?name=mouse`
+- **By Stock Status:** `GET /products?stock_status=in_stock`
+
+---
+
+## **Rate Limiting**
+
+Each client is limited to 4 requests per 15 minutes.
+Headers included in responses:
+
+```json
+{
+  "X-RateLimit-Limit": 4,
+  "X-RateLimit-Remaining": 2,
+  "X-RateLimit-Reset": 1709136700
+}
+```
+
+---
+
+## **Error Handling**
+
+#### **Common Error Responses**
+
+```json
+{
+  "status": "error",
+  "message": "Product not found"
+}
+```
+
+```json
+{
+  "status": "error",
+  "message": "Invalid request body"
+}
+```
+
+---
+
+## **License**
+
+MIT License.

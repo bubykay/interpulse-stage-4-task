@@ -6,38 +6,40 @@ const options = {
   definition: {
     openapi: "3.0.0",
     info: {
-      title: "Title of Task 1",
+      title: "Product CRUD API",
       version: "1.0.0",
-      description: "API documentation for Task 1 project",
+      description:
+        "API documentation for Internpulse stage 4 tasks - product CRUD",
     },
     components: {
-    responses: {
-      NotFound: {
-        description: "Resource not found",
-        content: {
-          "application/json": {
-            schema: {
-              type: "object",
-              properties: {
-                error: {
-                  type: "string",
-                  example: "User not found",
+      responses: {
+        NotFound: {
+          description: "Resource not found",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  error: {
+                    type: "string",
+                    example: "User not found",
+                  },
                 },
               },
             },
           },
         },
-      },
-      ServerError: {
-        description: "Internal server error",
-        content: {
-          "application/json": {
-            schema: {
-              type: "object",
-              properties: {
-                error: {
-                  type: "string",
-                  example: "Internal server error. Please try again later.",
+        ServerError: {
+          description: "Internal server error",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  error: {
+                    type: "string",
+                    example: "Internal server error. Please try again later.",
+                  },
                 },
               },
             },
@@ -45,20 +47,18 @@ const options = {
         },
       },
     },
-  },
-    
     servers: [
       {
         url: config.swaggerDomain, // Change this to your deployed URL
-        description: config.isProduction ? "Production Server": "Local development server",
+        description: config.isProduction
+          ? "Production Server"
+          : "Local development server",
       },
     ],
   },
-  
+  baseUrl: config.baseUrl, // Add baseUrl here
   apis: ["./src/routes/*.js"], // Path to your API route files
 };
-
-
 
 const swaggerSpec = swaggerJSDoc(options);
 
