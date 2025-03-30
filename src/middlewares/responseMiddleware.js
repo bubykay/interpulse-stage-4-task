@@ -4,17 +4,21 @@ import {
 } from "../schemas/responseSchemas.js";
 
 const responseMiddleware = (req, res, next) => {
+  if (req.path.includes("api-docs")) {
+    return next();
+  }
+
   const originalSend = res.send;
 
   res.send = (body) => {
     let modifiedResponse = body;
     try {
-      const parsedBody = JSON.parse(body);
+      const parsedBody = JSON.parse(body)
 
       if (res.statusCode < 400) {
         parsedBody.statusCode = res.statusCode;
         modifiedResponse = JSON.stringify(
-          successResponseFormat({ ...parsedBody }, parsedBody.message)
+          successResponseFormat({ ...parsedBody }, parsedBody.message, res)
         );
       } else if (res.statusCode >= 400) {
         parsedBody.statusCode = res.statusCode;
