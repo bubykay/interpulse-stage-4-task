@@ -15,8 +15,8 @@ The **Product API** is a RESTful service that allows users to manage products. I
 
 ```sh
 # Clone the repository
-git clone <repository-url>
-cd <project-folder>
+git clone https://github.com/bubykay/interpulse-stage-4-task
+cd interpulse-stage-4-task
 
 # Install dependencies
 yarn install  # or npm install
